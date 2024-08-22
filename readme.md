@@ -1,8 +1,8 @@
-# Django Deployment Guide with Gunicorn and Nginx on Windows
+# Django Deployment Guide with Waitress and Nginx on Windows
 
 ## Introduction
 
-This guide provides detailed instructions on setting up and deploying a Django application using Gunicorn as the WSGI server and Nginx as the reverse proxy on a Windows environment.
+This guide provides detailed instructions for deploying a Django application using Waitress as the WSGI server and Nginx as the reverse proxy on a Windows environment.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ This guide provides detailed instructions on setting up and deploying a Django a
 - [Installation](#installation)
   - [Install Python and Pip](#install-python-and-pip)
   - [Set Up Django Project](#set-up-django-project)
-  - [Set Up Gunicorn](#set-up-gunicorn)
+  - [Set Up Waitress](#set-up-waitress)
   - [Install and Configure Nginx](#install-and-configure-nginx)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
@@ -19,19 +19,19 @@ This guide provides detailed instructions on setting up and deploying a Django a
 
 ## Prerequisites
 
-Before starting, ensure you have the following installed:
+Before you start, ensure the following software is installed:
 
 - **Python 3.x**: [Download Python](https://www.python.org/downloads/)
 - **Pip**: Comes with Python 3.x
 - **Django**: Web framework for Python
-- **Gunicorn**: WSGI HTTP server
+- **Waitress**: WSGI server
 - **Nginx**: Web server and reverse proxy
 
 ## Installation
 
 ### Install Python and Pip
 
-1. Download and install Python from the [official Python website](https://www.python.org/downloads/). Ensure the "Add Python to PATH" option is checked during installation.
+1. Download and install Python from the [official Python website](https://www.python.org/downloads/). Ensure the "Add Python to PATH" option is selected during installation.
 
 2. Verify the installations:
 
@@ -82,24 +82,24 @@ Before starting, ensure you have the following installed:
     python manage.py migrate
     ```
 
-7. Start the development server:
+7. Start the development server to test your setup:
 
     ```bash
     python manage.py runserver
     ```
 
-### Set Up Gunicorn
+### Set Up Waitress
 
-1. Install Gunicorn:
+1. Install Waitress:
 
     ```bash
-    pip install gunicorn
+    pip install waitress
     ```
 
-2. Start Gunicorn:
+2. Start Waitress:
 
     ```bash
-    gunicorn myproject.wsgi:application
+    waitress-serve --host=127.0.0.1 --port=8000 myproject.wsgi:application
     ```
 
 ### Install and Configure Nginx
@@ -159,9 +159,23 @@ Before starting, ensure you have the following installed:
 
 1. **Update Django Settings:**
 
-   Ensure your `settings.py` file is configured to use a production database and that the `ALLOWED_HOSTS` setting includes your domain or IP address.
+   Ensure your `settings.py` file is configured for production:
 
    ```python
    # settings.py
 
    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+   # Security settings
+   SESSION_COOKIE_SECURE = True
+   SESSION_COOKIE_HTTPONLY = True
+   SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+
+
+
+In this setup, Nginx acts as a reverse proxy. It receives client requests, forwards them to the Django application running on Gunicorn, and then sends the response from Gunicorn back to the client. This allows Nginx to handle tasks like SSL termination, load balancing, and serving static files, while Gunicorn focuses on running the Python application.
+
+
+Using Nginx as a reverse proxy enhances performance, security, and scalability. It allows the server to manage more connections efficiently and adds a layer of security by not exposing the application server directly to the internet.
