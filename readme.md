@@ -14,6 +14,7 @@ This guide provides detailed instructions for deploying a Django application usi
   - [Set Up Waitress](#set-up-waitress)
   - [Install and Configure Nginx](#install-and-configure-nginx)
 - [Configuration](#configuration)
+- [Prototyping with Figma](#prototyping-with-figma)
 - [Troubleshooting](#troubleshooting)
 - [Conclusion](#conclusion)
 
@@ -168,7 +169,7 @@ Before you start, ensure the following software is installed:
    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
-
+Before implementing the design in code, I utilized Figma for prototyping. This process began with creating wireframes to outline the layout and functionality of the application. I then developed high-fidelity mockups, incorporating colors, typography, and UI elements to visualize the final design. Finally, I exported design assets and specifications from Figma to use in the development phase. By using Figma for prototyping, I ensured that the design was well-thought-out and aligned with user needs before translating it into code. Here is the figma Link (https://www.figma.com/design/STZaMxOvYTg4H2kQ1k4Fao/Untitled?node-id=0-1&t=JzNbV6bhWIoAeSW9-0)
 
 
 In this setup, Nginx acts as a reverse proxy. It receives client requests, forwards them to the Django application running on Gunicorn, and then sends the response from Gunicorn back to the client. This allows Nginx to handle tasks like SSL termination, load balancing, and serving static files, while Gunicorn focuses on running the Python application.
