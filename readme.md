@@ -36,10 +36,8 @@ Before you start, ensure the following software is installed:
 2. Verify the installations:
 
     ```bash
-    # Verify Python installation
     python --version
 
-    # Verify Pip installation
     pip --version
     ```
 
@@ -162,11 +160,9 @@ Before you start, ensure the following software is installed:
    Ensure your `settings.py` file is configured for production:
 
    ```python
-   # settings.py
 
    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-   # Security settings
    SESSION_COOKIE_SECURE = True
    SESSION_COOKIE_HTTPONLY = True
    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
