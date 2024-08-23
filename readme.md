@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This guide provides detailed instructions for deploying a Django application using Waitress as the WSGI server and Nginx as the reverse proxy on a Windows environment.
+Deploying a Django application involves several steps to ensure it runs efficiently and securely in a production environment. This guide walks you through deploying a Django application using Waitress as the WSGI server and Nginx as the reverse proxy on a Windows system. Waitress is a robust WSGI server, while Nginx handles client requests and forwards them to Waitress, improving performance and security.
 
 ## Table of Contents
 
@@ -20,101 +20,119 @@ This guide provides detailed instructions for deploying a Django application usi
 
 ## Prerequisites
 
-Before you start, ensure the following software is installed:
+Before starting, ensure the following software is installed:
 
-- **Python 3.x**: [Download Python](https://www.python.org/downloads/)
-- **Pip**: Comes with Python 3.x
-- **Django**: Web framework for Python
-- **Waitress**: WSGI server
-- **Nginx**: Web server and reverse proxy
+- **Python 3.x**: Download from [Python Official Website](https://www.python.org/downloads/).
+- **Pip**: Comes with Python 3.x.
+- **Django**: Web framework for Python.
+- **Waitress**: WSGI server for Python.
+- **Nginx**: Web server and reverse proxy.
 
 ## Installation
 
 ### Install Python and Pip
 
-1. Download and install Python from the [official Python website](https://www.python.org/downloads/). Ensure the "Add Python to PATH" option is selected during installation.
+1. **Download and Install Python**:
+   - Go to the [Python Downloads Page](https://www.python.org/downloads/) and download the latest version of Python 3.x.
+   - During installation, ensure you select the "Add Python to PATH" checkbox. This makes Python and Pip accessible from the command line.
 
-2. Verify the installations:
+2. **Verify Installations**:
+   - Open Command Prompt and run:
 
     ```bash
     python --version
-
     pip --version
     ```
 
+   - This will display the installed versions of Python and Pip, confirming the installation.
+
 ### Set Up Django Project
 
-1. Navigate to your project directory:
+1. **Navigate to Your Project Directory**:
 
     ```bash
     cd path\to\your\project
     ```
 
-2. Create and activate a virtual environment:
+2. **Create and Activate a Virtual Environment**:
+   - Create a virtual environment to manage dependencies:
 
     ```bash
     python -m venv venv
+    ```
+
+   - Activate the virtual environment:
+
+    ```bash
     venv\Scripts\activate
     ```
 
-3. Install Django:
+3. **Install Django**:
 
     ```bash
     pip install django
     ```
 
-4. Create a new Django project:
+4. **Create a New Django Project**:
 
     ```bash
     django-admin startproject myproject
     ```
 
-5. Navigate to the project directory:
+5. **Navigate to the Project Directory**:
 
     ```bash
     cd myproject
     ```
 
-6. Run initial migrations:
+6. **Run Initial Migrations**:
 
     ```bash
     python manage.py migrate
     ```
 
-7. Start the development server to test your setup:
+7. **Start the Development Server**:
+   - Test your setup by running:
 
     ```bash
     python manage.py runserver
     ```
 
+   - Open your browser and go to `http://127.0.0.1:8000/` to see the Django welcome page.
+
 ### Set Up Waitress
 
-1. Install Waitress:
+1. **Install Waitress**:
 
     ```bash
     pip install waitress
     ```
 
-2. Start Waitress:
+2. **Start Waitress**:
+   - Launch Waitress to serve your Django application:
 
     ```bash
     waitress-serve --host=127.0.0.1 --port=8000 myproject.wsgi:application
     ```
 
+   - Waitress will now serve your Django application at `http://127.0.0.1:8000`.
+
 ### Install and Configure Nginx
 
-1. Download Nginx from the [official site](https://nginx.org/en/download.html) and extract the files to a directory (e.g., `C:\nginx`).
+1. **Download and Install Nginx**:
+   - Download Nginx from the [official Nginx site](https://nginx.org/en/download.html).
+   - Extract the files to a directory, for example, `C:\nginx`.
 
-2. Navigate to the Nginx directory and start Nginx:
+2. **Start Nginx**:
+   - Navigate to the Nginx directory and start Nginx:
 
     ```bash
     cd C:\nginx
     start nginx
     ```
 
-3. Configure Nginx:
-
-    Open the `nginx.conf` file located in `C:\nginx\conf\` and modify it as follows:
+3. **Configure Nginx**:
+   - Open `nginx.conf` located in `C:\nginx\conf\` with a text editor and modify it as follows:
 
     ```nginx
     worker_processes  1;
@@ -148,7 +166,8 @@ Before you start, ensure the following software is installed:
     }
     ```
 
-4. Create a `logs` directory in the Nginx installation folder:
+4. **Create a `logs` Directory**:
+   - To ensure logs are saved properly, create a `logs` directory in the Nginx installation folder:
 
     ```bash
     mkdir C:\nginx\logs
@@ -156,23 +175,55 @@ Before you start, ensure the following software is installed:
 
 ## Configuration
 
-1. **Update Django Settings:**
+1. **Update Django Settings**:
+   - Ensure your `settings.py` file is configured for production:
 
-   Ensure your `settings.py` file is configured for production:
+    ```python
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-   ```python
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-   ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-   SESSION_COOKIE_SECURE = True
-   SESSION_COOKIE_HTTPONLY = True
-   SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    ```
 
+   - This configuration ensures that Django’s static and media files are handled properly and that cookies are secure.
 
-Before implementing the design in code, I utilized Figma for prototyping. This process began with creating wireframes to outline the layout and functionality of the application. I then developed high-fidelity mockups, incorporating colors, typography, and UI elements to visualize the final design. Finally, I exported design assets and specifications from Figma to use in the development phase. By using Figma for prototyping, I ensured that the design was well-thought-out and aligned with user needs before translating it into code. Here is the figma Link (https://www.figma.com/design/STZaMxOvYTg4H2kQ1k4Fao/Untitled?node-id=0-1&t=JzNbV6bhWIoAeSW9-0)
+## Prototyping with Figma
 
+Before implementing the design in code, prototyping was done using Figma. This process involved:
+
+1. **Creating Wireframes**:
+   - Outline the layout and functionality of the application.
+
+2. **Developing High-Fidelity Mockups**:
+   - Incorporate colors, typography, and UI elements to visualize the final design.
+
+3. **Exporting Design Assets**:
+   - Export design assets and specifications from Figma for use in development.
+
+   - [Figma Prototype Link](https://www.figma.com/design/STZaMxOvYTg4H2kQ1k4Fao/Untitled?node-id=0-1&t=JzNbV6bhWIoAeSW9-0)
+
+## Troubleshooting
+
+1. **Common Issues**:
+   - **Port Conflicts**: Ensure no other applications are using port 8000.
+   - **Permissions Errors**: Run Command Prompt as Administrator if encountering permission issues.
+   - **Nginx Configuration Errors**: Verify the Nginx configuration with `nginx -t`.
+
+2. **Debugging Tips**:
+   - Check logs in `C:\nginx\logs` for Nginx errors.
+   - Use `curl` or Postman to test endpoints and ensure they are correctly proxied.
+
+## Conclusion
+
+This guide covered the essential steps for deploying a Django application with Waitress and Nginx on Windows. By setting up Waitress as the WSGI server and Nginx as the reverse proxy, you can enhance performance, security, and scalability. For a production environment, always follow best practices, such as securing your application and monitoring server performance.
+
+---
 
 In this setup, Nginx acts as a reverse proxy. It receives client requests, forwards them to the Django application running on Gunicorn, and then sends the response from Gunicorn back to the client. This allows Nginx to handle tasks like SSL termination, load balancing, and serving static files, while Gunicorn focuses on running the Python application.
-
-
-Using Nginx as a reverse proxy enhances performance, security, and scalability. It allows the server to manage more connections efficiently and adds a layer of security by not exposing the application server directly to the internet.
